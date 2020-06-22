@@ -26,8 +26,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const length = 5;
+  static const length = 10;
   ScrollNotification _notification = null;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +40,7 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           NotificationListener<ScrollNotification>(
             child: SingleChildScrollView(
+              controller: _scrollController,
               child: Column(
                 children: _buildCards(),
               ),
@@ -63,6 +65,15 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: IconButton(
+          icon: Icon(Icons.arrow_downward),
+          onPressed: () {
+            _scrollController.animateTo(200,
+                duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+          },
+        ),
       ),
     );
   }
