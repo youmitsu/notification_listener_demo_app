@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,6 +27,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   static const length = 5;
+  ScrollNotification _notification = null;
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +35,34 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('NotificationListenerDemo'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: _buildCards(),
-        ),
+      body: Stack(
+        children: <Widget>[
+          NotificationListener<ScrollNotification>(
+            child: SingleChildScrollView(
+              child: Column(
+                children: _buildCards(),
+              ),
+            ),
+            onNotification: (notification) {
+              Logger()..d(notification);
+              setState(() {
+                _notification = notification;
+              });
+              return false;
+            },
+          ),
+          Center(
+            child: DefaultTextStyle(
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+              ),
+              child: Text(
+                _notification.runtimeType.toString(),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
