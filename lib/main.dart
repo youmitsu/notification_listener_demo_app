@@ -27,7 +27,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   static const length = 10;
-  ScrollNotification _notification = null;
+  ScrollNotification _notification;
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -47,6 +47,17 @@ class _HomePageState extends State<HomePage> {
             ),
             onNotification: (notification) {
               Logger()..d(notification);
+              if (notification is ScrollStartNotification) {
+                Logger()..d(notification.dragDetails);
+              } else if (notification is UserScrollNotification) {
+                Logger()..d(notification.direction);
+              } else if (notification is ScrollUpdateNotification) {
+                Logger()..d(notification.dragDetails);
+              } else if (notification is ScrollEndNotification) {
+                Logger()..d(notification.dragDetails);
+              } else if (notification is OverscrollNotification) {
+                Logger()..d(notification.dragDetails);
+              }
               setState(() {
                 _notification = notification;
               });
@@ -67,13 +78,11 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        child: IconButton(
-          icon: Icon(Icons.arrow_downward),
-          onPressed: () {
-            _scrollController.animateTo(200,
-                duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
-          },
-        ),
+        child: Icon(Icons.arrow_downward),
+        onPressed: () {
+          _scrollController.animateTo(200,
+              duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+        },
       ),
     );
   }
